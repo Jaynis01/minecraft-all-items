@@ -179,3 +179,67 @@ function setText(element,text){
         text;
 
 }
+
+
+/*
+    Minecraft Helfer
+*/
+
+const assistantButton =
+    document.getElementById(
+        "assistant-button"
+    );
+
+
+const askButton =
+    document.getElementById(
+        "ask-button"
+    );
+
+
+const assistantInput =
+    document.getElementById(
+        "assistant-input"
+    );
+
+
+const assistantAnswer =
+    document.getElementById(
+        "assistant-answer"
+    );
+
+
+
+if(assistantButton){
+
+    assistantButton.onclick =
+        function(){
+
+            document
+            .getElementById(
+                "assistant-popup"
+            )
+            .classList
+            .remove(
+                "hidden"
+            );
+
+        };
+
+}
+
+
+
+if(askButton){
+
+    askButton.onclick =
+        function(){
+
+            assistantAnswer.innerHTML =
+                askMinecraftAssistant(
+                    assistantInput.value
+                );
+
+        };
+
+}
