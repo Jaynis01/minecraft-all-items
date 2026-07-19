@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,83 +10,249 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
-    <main>
 
-        <div class="language-setting">
-            <label for="language">Sprache:</label>
+<main>
 
-            <select id="language">
-                <option value="de">Deutsch</option>
-                <option value="en">English</option>
-            </select>
+
+    <!-- SPRACHE -->
+
+    <div class="language-setting">
+
+        <label for="language">
+            Sprache:
+        </label>
+
+        <select id="language">
+
+            <option value="de">
+                Deutsch
+            </option>
+
+            <option value="en">
+                English
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <!-- TITEL -->
+
+    <h1>
+        ⛏ Minecraft All Items
+    </h1>
+
+
+
+    <!-- AKTIONSMENÜ -->
+
+    <section class="action-bar">
+
+        <button id="missing-items-button">
+            🎲 Zufall
+        </button>
+
+        <button id="history-button">
+            📜 Verlauf
+        </button>
+
+
+    </section>
+
+
+
+    <!-- FUNKTIONS-POPUP -->
+
+    <div id="feature-popup" class="popup hidden">
+
+        <button id="close-popup">
+            ✖
+        </button>
+
+
+        <h2 id="popup-title">
+        </h2>
+
+
+        <div id="popup-content">
         </div>
 
-        <h1>⛏ Minecraft All Items</h1>
 
-        <section class="user-area">
-            <label for="username">Du bist:</label>
+    </div>
 
-            <input
-                type="text"
-                id="username"
-                placeholder="Name eingeben"
-                maxlength="20"
-            >
-        </section>
 
-        <section class="progress-area">
-            <div class="progress-heading">
-                <h2 id="counter">Fortschritt: 0 / 0</h2>
-                <span id="percentage">0 %</span>
+
+
+
+    <!-- SPIELER -->
+
+    <section class="user-area">
+
+        <label for="username">
+            Du bist:
+        </label>
+
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Name eingeben"
+            maxlength="20"
+        >
+
+    </section>
+
+
+
+
+
+    <!-- FORTSCHRITT -->
+
+    <section class="progress-area">
+
+
+        <div class="progress-heading">
+
+            <h2 id="counter">
+                Fortschritt: 0 / 0
+            </h2>
+
+
+            <span id="percentage">
+                0 %
+            </span>
+
+
+        </div>
+
+
+        <div class="progress-background">
+
+            <div id="progress-bar">
             </div>
 
-            <div class="progress-background">
-                <div id="progress-bar"></div>
+        </div>
+
+
+    </section>
+
+
+
+
+
+
+    <!-- DASHBOARD -->
+
+    <section class="dashboard">
+
+
+        <div class="dashboard-card">
+
+
+            <h2 id="latest-title">
+                Zuletzt gesammelt
+            </h2>
+
+
+            <div id="latest-collected">
+
+                Noch kein Item gesammelt.
+
             </div>
-        </section>
 
-        <section class="dashboard">
-            <div class="dashboard-card">
-                <h2 id="latest-title">Zuletzt gesammelt</h2>
 
-                <div id="latest-collected">
-                    Noch kein Item gesammelt.
-                </div>
+        </div>
+
+
+
+
+
+        <div class="dashboard-card">
+
+
+            <h2 id="statistics-title">
+                Statistiken
+            </h2>
+
+
+            <div id="statistics">
+
+                Noch keine Statistiken verfügbar.
+
             </div>
-        </section>
 
-        <section class="dashboard-card">
-            <div class="dashboard-card">
-                <h2 id="statistics-title">Statistiken</h2>
 
-                <div id="statistics">
-                     Noch keine Statistiken verfügbar.
-                </div>
-            </div>
-        </section>
+        </div>
 
-       <input
-    type="search"
-    id="search"
-    class="search-box"
-    placeholder="Item suchen …"
->
 
-        <p id="search-result"></p>
+    </section>
 
-        <div id="items"></div>
 
-    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="config.js"></script>
-    <script src="language.js"></script>
-    <script src="utils.js"></script>
-    <script src="dashboard.js"></script>
-    <script src="items.js"></script>
-    <script src="supabase.js"></script>
-    <script src="script.js"></script>   
+
+
+
+    <!-- SUCHE -->
+
+
+    <input
+        type="search"
+        id="search"
+        class="search-box"
+        placeholder="Item suchen …"
+    >
+
+
+    <p id="search-result">
+    </p>
+
+
+
+
+
+
+    <!-- ITEMLISTE -->
+
+
+    <div id="items">
+    </div>
+
+
+
+
+</main>
+
+
+
+
+
+
+<!-- SCRIPTE -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script src="config.js"></script>
+
+<script src="language.js"></script>
+
+<script src="utils.js"></script>
+
+<script src="dashboard.js"></script>
+
+<script src="items.js"></script>
+
+<script src="supabase.js"></script>
+
+<script src="script.js"></script>
+
+
 </body>
+
 </html>

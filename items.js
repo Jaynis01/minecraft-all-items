@@ -1,418 +1,788 @@
 /*
-    ITEMLISTE LADEN
+    HTML ELEMENTE
+*/
+
+const itemContainer =
+    document.getElementById("items");
+
+const counter =
+    document.getElementById("counter");
+
+const percentage =
+    document.getElementById("percentage");
+
+const progressBar =
+    document.getElementById("progress-bar");
+
+const searchInput =
+    document.getElementById("search");
+
+const searchResult =
+    document.getElementById("search-result");
+
+
+
+/*
+    ITEMS LADEN
 */
 
 async function loadItems() {
+
     showLoadingMessage();
 
     try {
+
         const response =
             await fetch(
                 ITEM_LIST_URL
             );
 
+
         if (!response.ok) {
+
             throw new Error(
-                "Die Itemliste konnte nicht geladen werden. Status: " +
-                response.status
+                "Itemliste konnte nicht geladen werden."
             );
+
         }
+
 
         const onlineItems =
             await response.json();
 
-        items = onlineItems
-            .filter(
-                function (item) {
-                    const isSpawnEgg =
-                        item.name.endsWith(
-                            "_spawn_egg"
-                        );
 
-                    const isExcluded =
-                        excludedItems.includes(
-                            item.name
-                        );
+        items =
+            onlineItems
 
-                    return (
-                        !isSpawnEgg &&
-                        !isExcluded
-                    );
-                }
-            )
-            .map(
-                function (item) {
-                    return {
-                        id: item.name,
-                        englishName:
-                            item.displayName
-                    };
-                }
-            )
-            .map(
-                function (item) {
-                    return {
-                        id: item.id,
+            .filter(function(item){
 
-                        englishName:
-                            item.englishName,
+                return (
+                    !item.name.endsWith("_spawn_egg") &&
+                    !excludedItems.includes(item.name)
+                );
 
-                        name:
-                            getTranslatedItemName(
-                                item
-                            )
-                    };
-                }
-            )
-            .sort(
-                function (
-                    firstItem,
-                    secondItem
-                ) {
-                    return firstItem.name
-                        .localeCompare(
-                            secondItem.name,
-                            currentLanguage ===
-                                "de"
-                                ? "de"
-                                : "en"
-                        );
-                }
-            );
+            })
+
+
+            .map(function(item){
+
+                return {
+                    id: item.name,
+                    englishName: item.displayName
+                };
+
+            })
+
+
+            .map(function(item){
+
+                return {
+                    id: item.id,
+                    englishName: item.englishName,
+                    name:
+                        getTranslatedItemName(item)
+                };
+
+            })
+
+
+            .sort(function(a,b){
+
+                return a.name.localeCompare(
+                    b.name,
+                    currentLanguage === "de"
+                        ? "de"
+                        : "en"
+                );
+
+            });
+
 
         createItemList();
+
         updateCounter();
 
-        searchResult.textContent =
-            "";
-    } catch (error) {
+
+    }
+
+    catch(error){
+
         console.error(
-            "Fehler beim Laden der Itemliste:",
             error
         );
 
         showLoadingError();
+
     }
+
 }
+
 
 
 /*
     ITEMLISTE ERSTELLEN
 */
 
-function createItemList() {
-    itemContainer.innerHTML =
-        "";
+function createItemList(){
 
-    items.forEach(
-        function (item) {
-            const itemRow =
-                document.createElement(
-                    "div"
-                );
+    itemContainer.innerHTML = "";
 
-            itemRow.classList.add(
-                "item-row"
+
+    items.forEach(function(item){
+
+
+        const row =
+            document.createElement(
+                "div"
             );
 
-            itemRow.dataset.itemName =
-                item.name.toLowerCase() +
+
+        row.classList.add(
+            "item-row"
+        );
+
+
+        row.dataset.itemId =
+            item.id;
+
+
+        row.dataset.itemName =
+            (
+                item.name +
                 " " +
-                item.englishName
-                    .toLowerCase() +
+                item.englishName +
                 " " +
-                item.id.toLowerCase();
+                item.id
+            )
+            .toLowerCase();
 
-            const icon =
-                createItemIcon(item);
 
-            const itemContent =
-                document.createElement(
-                    "div"
-                );
 
-            itemContent.classList.add(
-                "item-content"
+        const icon =
+            createItemIcon(item);
+
+
+
+        const content =
+            document.createElement(
+                "div"
             );
 
-            const label =
-                document.createElement(
-                    "label"
-                );
 
-            const checkbox =
-                document.createElement(
-                    "input"
-                );
+        content.classList.add(
+            "item-content"
+        );
 
-            checkbox.type =
-                "checkbox";
 
-            checkbox.id =
-                "checkbox_" +
-                item.id;
 
-            const itemName =
-                document.createElement(
-                    "span"
-                );
-
-            itemName.textContent =
-                item.name;
-
-            const details =
-                document.createElement(
-                    "div"
-                );
-
-            details.classList.add(
-                "item-details"
+        const label =
+            document.createElement(
+                "label"
             );
 
-            const savedData =
-                getSavedItemData(
-                    item.id
-                );
 
-            if (savedData) {
-                checkbox.checked =
-                    true;
 
-                itemRow.classList.add(
-                    "collected"
-                );
-
-                showItemDetails(
-                    details,
-                    savedData
-                );
-            }
-
-            checkbox.addEventListener(
-                "change",
-                function () {
-                    handleItemChange(
-                        item,
-                        checkbox,
-                        details,
-                        itemRow
-                    );
-                }
+        const checkbox =
+            document.createElement(
+                "input"
             );
 
-            label.appendChild(
-                checkbox
+
+        checkbox.type =
+            "checkbox";
+
+
+        checkbox.id =
+            "checkbox_" + item.id;
+
+
+
+        const name =
+            document.createElement(
+                "span"
             );
 
-            label.appendChild(
-                itemName
+
+        name.textContent =
+            item.name;
+
+
+
+        const details =
+            document.createElement(
+                "div"
             );
 
-            itemContent.appendChild(
-                label
+
+        details.classList.add(
+            "item-details"
+        );
+
+
+
+        const saved =
+            getSavedItemData(
+                item.id
             );
 
-            itemContent.appendChild(
-                details
+
+
+        if(saved){
+
+            checkbox.checked =
+                true;
+
+            row.classList.add(
+                "collected"
             );
 
-            itemRow.appendChild(
-                icon
+            showItemDetails(
+                details,
+                saved
             );
 
-            itemRow.appendChild(
-                itemContent
-            );
-
-            itemContainer.appendChild(
-                itemRow
-            );
         }
-    );
+
+
+
+        checkbox.addEventListener(
+            "change",
+            function(){
+
+                handleItemChange(
+                    item,
+                    checkbox,
+                    details,
+                    row
+                );
+
+            }
+        );
+
+
+
+        label.appendChild(
+            checkbox
+        );
+
+        label.appendChild(
+            name
+        );
+
+        content.appendChild(
+            label
+        );
+
+        content.appendChild(
+            details
+        );
+
+        row.appendChild(
+            icon
+        );
+
+        row.appendChild(
+            content
+        );
+
+
+        itemContainer.appendChild(
+            row
+        );
+
+    });
+
 }
 
 
+
 /*
-    ITEMBILD ERSTELLEN
+    ICONS
 */
 
-function createItemIcon(item) {
-    const icon =
+function createItemIcon(item){
+
+    const img =
         document.createElement(
             "img"
         );
 
-    icon.classList.add(
+
+    img.classList.add(
         "item-icon"
     );
 
-    icon.alt =
+
+    img.alt =
         item.name;
 
-    icon.loading =
+
+    img.loading =
         "lazy";
 
+
     setIconSourceWithFallback(
-        icon,
+        img,
         item.id
     );
 
-    return icon;
+
+    return img;
+
 }
 
 
-/*
-    ITEMBILD MIT FALLBACK
-*/
 
 function setIconSourceWithFallback(
-    imageElement,
-    itemId
-) {
-    const itemIconUrl =
+    img,
+    id
+){
+
+    img.src =
         ITEM_IMAGE_BASE_URL +
         "/items/" +
-        itemId +
+        id +
         ".png";
 
-    const blockIconUrl =
-        ITEM_IMAGE_BASE_URL +
-        "/blocks/" +
-        itemId +
-        ".png";
 
-    imageElement.src =
-        itemIconUrl;
+    img.onerror =
+        function(){
 
-    imageElement.addEventListener(
-        "error",
-        function handleIconError() {
-            if (
-                imageElement.dataset
-                    .triedBlock !==
+            if(
+                img.dataset.triedBlock
+                !==
                 "true"
-            ) {
-                imageElement.dataset
-                    .triedBlock =
+            ){
+
+                img.dataset.triedBlock =
                     "true";
 
-                imageElement.src =
-                    blockIconUrl;
-            } else {
-                imageElement.style
-                    .display =
-                    "none";
+
+                img.src =
+                    ITEM_IMAGE_BASE_URL +
+                    "/blocks/" +
+                    id +
+                    ".png";
+
             }
-        }
-    );
+
+            else {
+
+                img.style.display =
+                    "none";
+
+            }
+
+        };
+
 }
 
 
-/*
-    GESPEICHERTE ITEMDATEN
-*/
-
-function getSavedItemData(
-    itemId
-) {
-    return (
-        collectedItems[itemId] ||
-        null
-    );
-}
-
 
 /*
-    SAMMLER UND DATUM ANZEIGEN
+    ITEM ÄNDERN
 */
 
-function showItemDetails(
-    detailsElement,
-    itemData
-) {
-    const formattedDate =
-        formatDate(
-            itemData.collectedAt
+async function handleItemChange(
+    item,
+    checkbox,
+    details,
+    row
+){
+
+    const username =
+        usernameInput.value.trim();
+
+
+
+    if(
+        checkbox.checked &&
+        username === ""
+    ){
+
+        alert(
+            "Bitte gib zuerst deinen Namen ein."
         );
 
-    detailsElement.textContent =
-        getInterfaceText(
-            "collectedBy"
-        ) +
-        " " +
-        itemData.collectedBy +
-        " " +
-        getInterfaceText(
-            "on"
-        ) +
-        " " +
-        formattedDate;
-}
+        checkbox.checked =
+            false;
 
-
-/*
-    EIN ITEM IN DER ANZEIGE
-    AKTUALISIEREN
-*/
-
-function refreshItem(itemId) {
-    const checkbox =
-        document.getElementById(
-            "checkbox_" +
-            itemId
-        );
-
-    /*
-        Falls das Item gerade nicht
-        in der Liste vorhanden ist,
-        wird zumindest das Dashboard
-        aktualisiert.
-    */
-
-    if (!checkbox) {
-        updateLatestCollected();
+        usernameInput.focus();
 
         return;
+
     }
 
-    const itemRow =
+
+
+    checkbox.disabled =
+        true;
+
+
+
+    try{
+
+
+        if(
+            checkbox.checked
+        ){
+
+            await collectItem(
+                item,
+                username
+            );
+
+
+            row.classList.add(
+                "collected"
+            );
+
+
+            showItemDetails(
+                details,
+                collectedItems[item.id]
+            );
+
+
+        }
+
+        else {
+
+
+            await removeCollectedItem(
+                item
+            );
+
+
+            row.classList.remove(
+                "collected"
+            );
+
+
+            details.textContent =
+                "";
+
+        }
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        checkbox.checked =
+            !checkbox.checked;
+
+    }
+
+
+    finally{
+
+
+        checkbox.disabled =
+            false;
+
+
+        updateCounter();
+
+        updateLatestCollected();
+
+        updateStatistics();
+
+    }
+
+}
+
+
+
+/*
+    DATEN
+*/
+
+function getSavedItemData(id){
+
+    return (
+        collectedItems[id]
+        ||
+        null
+    );
+
+}
+
+
+
+function showItemDetails(
+    element,
+    data
+){
+
+    element.textContent =
+        getInterfaceText(
+            "collectedBy"
+        )
+        +
+        " "
+        +
+        data.collectedBy
+        +
+        " "
+        +
+        getInterfaceText(
+            "on"
+        )
+        +
+        " "
+        +
+        formatDate(
+            data.collectedAt
+        );
+
+}
+
+
+
+/*
+    REALTIME UPDATE
+*/
+
+function refreshItem(id){
+
+    const checkbox =
+        document.getElementById(
+            "checkbox_" + id
+        );
+
+
+    if(!checkbox){
+
+        return;
+
+    }
+
+
+    const row =
         checkbox.closest(
             ".item-row"
         );
 
+
     const details =
-        itemRow.querySelector(
+        row.querySelector(
             ".item-details"
         );
 
-    const itemData =
-        collectedItems[itemId];
 
-    if (itemData) {
+    const data =
+        collectedItems[id];
+
+
+
+    if(data){
+
         checkbox.checked =
             true;
 
-        itemRow.classList.add(
+        row.classList.add(
             "collected"
         );
 
         showItemDetails(
             details,
-            itemData
+            data
         );
-    } else {
+
+    }
+
+    else{
+
         checkbox.checked =
             false;
 
-        itemRow.classList.remove(
+        row.classList.remove(
             "collected"
         );
 
         details.textContent =
             "";
+
     }
 
+
     updateCounter();
-    updateLatestCollected();
-    updateStatistics();
+
+}
+
+
+
+/*
+    FORTSCHRITT
+*/
+
+function updateCounter(){
+
+    const checked =
+        document.querySelectorAll(
+            "#items input:checked"
+        ).length;
+
+
+    const percent =
+        items.length
+            ? Math.round(
+                checked /
+                items.length *
+                100
+            )
+            : 0;
+
+
+
+    counter.textContent =
+        getInterfaceText(
+            "progress"
+        )
+        +
+        ": "
+        +
+        checked
+        +
+        " / "
+        +
+        items.length;
+
+
+    percentage.textContent =
+        percent +
+        "%";
+
+
+    progressBar.style.width =
+        percent +
+        "%";
+
+}
+
+
+
+/*
+    SUCHE
+*/
+
+searchInput.addEventListener(
+    "input",
+    filterItems
+);
+
+
+
+function filterItems(){
+
+    const searchText =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+
+    const itemRows =
+        document.querySelectorAll(
+            ".item-row"
+        );
+
+
+    let visibleItems =
+        0;
+
+
+    itemRows.forEach(
+        function(itemRow){
+
+
+            const searchableName =
+                itemRow.dataset.itemName;
+
+
+            const matches =
+                searchableName.includes(
+                    searchText
+                );
+
+
+            if(matches){
+
+                itemRow.classList.remove(
+                    "hidden"
+                );
+
+                visibleItems++;
+
+            }
+
+            else{
+
+                itemRow.classList.add(
+                    "hidden"
+                );
+
+            }
+
+        }
+    );
+
+
+
+    if(searchText === ""){
+
+        searchResult.textContent =
+            "";
+
+    }
+
+
+    else if(visibleItems === 1){
+
+        searchResult.textContent =
+            "1 " +
+            getInterfaceText("item") +
+            " " +
+            getInterfaceText("found");
+
+    }
+
+
+    else{
+
+        searchResult.textContent =
+            visibleItems +
+            " " +
+            getInterfaceText("items") +
+            " " +
+            getInterfaceText("found");
+
+    }
+
+}
+
+
+
+/*
+    LADESTATUS
+*/
+
+function showLoadingMessage(){
+
+    itemContainer.innerHTML =
+        "<p>Itemliste wird geladen ...</p>";
+
+}
+
+
+
+function showLoadingError(){
+
+    itemContainer.innerHTML =
+        "<p>Fehler beim Laden der Itemliste.</p>";
+
 }
