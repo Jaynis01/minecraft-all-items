@@ -93,7 +93,43 @@ const interfaceTranslations = {
 
 
         searchPlaceholder:
-            "Item suchen …"
+            "Item suchen …",
+
+        categoryBuildingBlocks:
+"🧱 Baublöcke",
+
+categoryColoredBlocks:
+"🎨 Farbige Blöcke",
+
+categoryNaturalBlocks:
+"🌱 Natürliche Blöcke",
+
+categoryFunctionalBlocks:
+"⚙️ Funktionsblöcke",
+
+categoryRedstoneBlocks:
+"🔴 Redstone-Blöcke",
+
+categoryToolsUtilities:
+"🛠 Werkzeuge & Hilfsmittel",
+
+categoryCombat:
+"⚔️ Kampf",
+
+categoryFoodDrinks:
+"🍖 Essen & Getränke",
+
+categoryIngredients:
+"🧪 Zutaten",
+
+categoryNether:
+"🌋 Nether",
+
+categoryEnd:
+"🌌 Ende",
+categoryAll:
+    "Alle Kategorien",
+    
 
     },
 
@@ -163,7 +199,42 @@ const interfaceTranslations = {
 
 
         searchPlaceholder:
-            "Search item …"
+            "Search item …",
+
+        categoryBuildingBlocks:
+"🧱 Building Blocks",
+
+categoryColoredBlocks:
+"🎨 Colored Blocks",
+
+categoryNaturalBlocks:
+"🌱 Natural Blocks",
+
+categoryFunctionalBlocks:
+"⚙️ Functional Blocks",
+
+categoryRedstoneBlocks:
+"🔴 Redstone Blocks",
+
+categoryToolsUtilities:
+"🛠 Tools & Utilities",
+
+categoryCombat:
+"⚔️ Combat",
+
+categoryFoodDrinks:
+"🍖 Food & Drinks",
+
+categoryIngredients:
+"🧪 Ingredients",
+
+categoryNether:
+"🌋 Nether",
+
+categoryEnd:
+"🌌 The End",
+categoryAll:
+    "All Categories",
 
     }
 
@@ -267,6 +338,11 @@ function updateStaticTexts(){
             );
 
     }
+    if(categoryFilter){
+
+    createCategoryFilter();
+
+}
 
 }
 
@@ -352,7 +428,13 @@ function rebuildItemNames(){
         createItemList();
 
     }
+    if(
+    typeof updateStaticTexts === "function"
+){
 
+    updateStaticTexts();
+
+}
 
     if(
         typeof updateCounter === "function"
@@ -476,3 +558,4 @@ function getTranslatedItemName(item){
     );
 
 }
+

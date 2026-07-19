@@ -201,15 +201,23 @@
 
 
     <input
-        type="search"
-        id="search"
-        class="search-box"
-        placeholder="Item suchen …"
-    >
+    type="search"
+    id="search"
+    class="search-box"
+    placeholder="Item suchen …"
+>
 
 
-    <p id="search-result">
-    </p>
+<select id="category-filter">
+
+    <option value="all">
+        Alle Kategorien
+    </option>
+
+</select>
+
+
+<p id="search-result"></p>
 
 
 
@@ -241,6 +249,8 @@
 <script src="config.js"></script>
 
 <script src="language.js"></script>
+
+<script src="categories.js"></script>
 
 <script src="utils.js"></script>
 

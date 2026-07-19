@@ -20,6 +20,10 @@ const searchInput =
 const searchResult =
     document.getElementById("search-result");
 
+const categoryFilter =
+    document.getElementById(
+        "category-filter")
+
 
 
 /*
@@ -98,6 +102,8 @@ async function loadItems() {
             });
 
 
+        createCategoryFilter();
+
         createItemList();
 
         updateCounter();
@@ -123,30 +129,32 @@ async function loadItems() {
     ITEMLISTE ERSTELLEN
 */
 
-function createItemList(){
+function createItemList() {
 
     itemContainer.innerHTML = "";
 
 
-    items.forEach(function(item){
+    items.forEach(function(item) {
 
 
-        const row =
-            document.createElement(
-                "div"
-            );
+        const itemRow =
+            document.createElement("div");
 
 
-        row.classList.add(
+        itemRow.classList.add(
             "item-row"
         );
 
 
-        row.dataset.itemId =
+        itemRow.id =
+            "item_" + item.id;
+
+
+        itemRow.dataset.itemId =
             item.id;
 
 
-        row.dataset.itemName =
+        itemRow.dataset.itemName =
             (
                 item.name +
                 " " +
@@ -163,29 +171,23 @@ function createItemList(){
 
 
 
-        const content =
-            document.createElement(
-                "div"
-            );
+        const itemContent =
+            document.createElement("div");
 
 
-        content.classList.add(
+        itemContent.classList.add(
             "item-content"
         );
 
 
 
         const label =
-            document.createElement(
-                "label"
-            );
+            document.createElement("label");
 
 
 
         const checkbox =
-            document.createElement(
-                "input"
-            );
+            document.createElement("input");
 
 
         checkbox.type =
@@ -197,14 +199,70 @@ function createItemList(){
 
 
 
-        const name =
-            document.createElement(
-                "span"
+        const itemName =
+            document.createElement("span");
+
+
+        itemName.textContent =
+            item.name;
+
+
+
+        label.appendChild(
+            checkbox
+        );
+
+
+        label.appendChild(
+            itemName
+        );
+
+
+
+        /*
+            KATEGORIEN ANZEIGEN
+        */
+
+        const itemCategories =
+            getItemCategories(
+                item.id
             );
 
 
-        name.textContent =
-            item.name;
+        if(
+            itemCategories.length > 0
+        ){
+
+            const categoryText =
+                document.createElement(
+                    "div"
+                );
+
+
+            categoryText.classList.add(
+                "item-categories"
+            );
+
+
+            categoryText.textContent =
+                itemCategories
+                    .map(function(category){
+
+                        return getCategoryName(
+                            category
+                        );
+
+                    })
+                    .join(
+                        " • "
+                    );
+
+
+            itemContent.appendChild(
+                categoryText
+            );
+
+        }
 
 
 
@@ -220,25 +278,27 @@ function createItemList(){
 
 
 
-        const saved =
+        const savedData =
             getSavedItemData(
                 item.id
             );
 
 
 
-        if(saved){
+        if(savedData){
 
             checkbox.checked =
                 true;
 
-            row.classList.add(
+
+            itemRow.classList.add(
                 "collected"
             );
 
+
             showItemDetails(
                 details,
-                saved
+                savedData
             );
 
         }
@@ -253,7 +313,7 @@ function createItemList(){
                     item,
                     checkbox,
                     details,
-                    row
+                    itemRow
                 );
 
             }
@@ -261,33 +321,29 @@ function createItemList(){
 
 
 
-        label.appendChild(
-            checkbox
-        );
-
-        label.appendChild(
-            name
-        );
-
-        content.appendChild(
+        itemContent.appendChild(
             label
         );
 
-        content.appendChild(
+
+        itemContent.appendChild(
             details
         );
 
-        row.appendChild(
+
+
+        itemRow.appendChild(
             icon
         );
 
-        row.appendChild(
-            content
+
+        itemRow.appendChild(
+            itemContent
         );
 
 
         itemContainer.appendChild(
-            row
+            itemRow
         );
 
     });
@@ -675,15 +731,25 @@ searchInput.addEventListener(
     "input",
     filterItems
 );
+categoryFilter.addEventListener(
+    "change",
+    filterItems
+);
 
 
 
 function filterItems(){
 
     const searchText =
-        searchInput.value
-            .trim()
-            .toLowerCase();
+    searchInput.value
+        .trim()
+        .toLowerCase();
+
+
+const selectedCategory =
+    categoryFilter
+        ? categoryFilter.value
+        : "all";
 
 
     const itemRows =
@@ -704,13 +770,24 @@ function filterItems(){
                 itemRow.dataset.itemName;
 
 
-            const matches =
-                searchableName.includes(
-                    searchText
-                );
+            const matchesSearch =
+    searchableName.includes(
+        searchText
+    );
 
 
-            if(matches){
+const matchesCategory =
+    selectedCategory === "all"
+    ||
+    getItemCategories(
+        itemRow.dataset.itemId
+    )
+    .includes(
+        selectedCategory
+    );
+
+
+            if(matchesSearch && matchesCategory){
 
                 itemRow.classList.remove(
                     "hidden"
@@ -784,5 +861,69 @@ function showLoadingError(){
 
     itemContainer.innerHTML =
         "<p>Fehler beim Laden der Itemliste.</p>";
+
+}
+
+/*
+    KATEGORISIERUNG
+*/
+function createCategoryFilter(){
+
+    if(!categoryFilter){
+        return;
+    }
+
+
+    categoryFilter.innerHTML = "";
+
+
+    const allOption =
+        document.createElement(
+            "option"
+        );
+
+
+    allOption.value =
+        "all";
+
+
+    allOption.textContent =
+        getInterfaceText(
+            "categoryAll"
+        );
+
+
+    categoryFilter.appendChild(
+        allOption
+    );
+
+
+
+    Object.keys(categories)
+        .forEach(function(categoryId){
+
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                categoryId;
+
+
+            option.textContent =
+                getCategoryName(
+                    categoryId
+                );
+
+
+            categoryFilter.appendChild(
+                option
+            );
+
+
+        });
 
 }

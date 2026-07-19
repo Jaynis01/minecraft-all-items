@@ -637,7 +637,155 @@ button:hover {
 
 }
 
+/* =========================
+   Kategorie Filter
+========================= */
 
+#category-filter {
+
+    width: 100%;
+
+    padding: 14px 15px;
+
+    margin-bottom: 8px;
+
+
+    background:
+        var(--surface);
+
+    color:
+        var(--text);
+
+
+    border:
+
+        1px solid
+
+        var(--border);
+
+
+    border-radius:
+
+        10px;
+
+
+    box-shadow:
+
+        var(--shadow);
+
+
+    font-size:
+
+        16px;
+
+
+    cursor:
+
+        pointer;
+
+
+    appearance:
+
+        none;
+
+
+    background-image:
+
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--text-muted) 50%
+        ),
+        linear-gradient(
+            135deg,
+            var(--text-muted) 50%,
+            transparent 50%
+        );
+
+
+    background-position:
+
+        calc(100% - 18px) 50%,
+        calc(100% - 12px) 50%;
+
+
+    background-size:
+
+        6px 6px,
+        6px 6px;
+
+
+    background-repeat:
+
+        no-repeat;
+
+
+    transition:
+
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+
+#category-filter:hover {
+
+    background:
+
+        var(--surface-light);
+
+
+    border-color:
+
+        var(--border-light);
+
+}
+
+
+
+#category-filter:focus {
+
+    outline:
+
+        none;
+
+
+    border-color:
+
+        var(--green);
+
+
+    box-shadow:
+
+        var(--shadow),
+
+        0 0 0 3px
+
+        rgba(
+            85,
+            170,
+            51,
+            0.18
+        );
+
+}
+
+
+
+#category-filter option {
+
+    background:
+
+        var(--surface);
+
+
+    color:
+
+        var(--text);
+
+}
 
 /*
     ITEMLISTE
@@ -768,6 +916,27 @@ button:hover {
 
 }
 
+.item-name {
+
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+
+
+.item-categories {
+
+    margin-top: 3px;
+    margin-left: 31px;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.3;
+
+}
 
 
 /*
