@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Minecraft All Items</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+
+        <div class="language-setting">
+            <label for="language">Sprache:</label>
+
+            <select id="language">
+                <option value="de">Deutsch</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+
+        <h1>⛏ Minecraft All Items</h1>
+
+        <section class="user-area">
+            <label for="username">Du bist:</label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Name eingeben"
+                maxlength="20"
+            >
+        </section>
+
+        <section class="progress-area">
+            <div class="progress-heading">
+                <h2 id="counter">Fortschritt: 0 / 0</h2>
+                <span id="percentage">0 %</span>
+            </div>
+
+            <div class="progress-background">
+                <div id="progress-bar"></div>
+            </div>
+        </section>
+
+        <section class="dashboard">
+            <div class="dashboard-card">
+                <h2 id="latest-title">Zuletzt gesammelt</h2>
+
+                <div id="latest-collected">
+                    Noch kein Item gesammelt.
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-card">
+            <div class="dashboard-card">
+                <h2 id="statistics-title">Statistiken</h2>
+
+                <div id="statistics">
+                     Noch keine Statistiken verfügbar.
+                </div>
+            </div>
+        </section>
+
+       <input
+    type="search"
+    id="search"
+    class="search-box"
+    placeholder="Item suchen …"
+>
+
+        <p id="search-result"></p>
+
+        <div id="items"></div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="config.js"></script>
+    <script src="language.js"></script>
+    <script src="utils.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="items.js"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>   
+</body>
+</html>
